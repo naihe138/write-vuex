@@ -17,7 +17,8 @@
 
 
 ![](./src/images/cmd.png)
-安装好之后，就有一个带有v`uex`的`vue`项目了。
+
+安装好之后，就有一个带有`vuex`的`vue`项目了。
 
 进入目录然后看到，`src/store.js`，在里面加了一个状态`{count: 100}`，如下
 
@@ -64,6 +65,7 @@ export default {
 
 项目跑起来就会看到页面上看到，页面上会有100了，如下图
 
+
 ![](./src/images/res3.png)
 
 到这里我们使用`vuex`创建了一个`store`，并且在我们的App组件视图中使用，但是我们会有一些列的疑问。
@@ -74,11 +76,11 @@ export default {
 * 在组件中为什么用`this.$store.commit`可以触发`store`的`mutations`？？
 * ....等等等等
 
-带着一堆问题，我们来自己实现一个vuex，来理解vuex的工作原理。
+带着一堆问题，我们来自己实现一个`vuex`，来理解`vuex`的工作原理。
 
 ### 安装并使用store
 
-在src下新建一个vuex.js文件，然后代码如下
+在`src`下新建一个`vuex.js`文件，然后代码如下
 
 ````js
 'use strict'
@@ -127,7 +129,7 @@ export default { install, Store }
 
 ### 设置state响应数据
 
-通过上面，我们已经从每个组件都通过`this.$store`来访问到我们的store的实例，下面我们就编写state数据，让其变成双向绑定的数据。下面我们改写store类
+通过上面，我们已经从每个组件都通过`this.$store`来访问到我们的store的实例，下面我们就编写`state`数据，让其变成双向绑定的数据。下面我们改写`store`类
 
 ````js
 class Store {
@@ -150,11 +152,11 @@ class Store {
 }
 ````
 
-传进来的state对象，通过new Vue({data: {state}})的方式，让数据变成响应式的。当访问state对象时候，就直接返回响应式的数据，这样子在App.vue中就可以通过`this.$store.state.count`拿到state的数据啦，并且是响应式的呢。
+传进来的`state`对象，通过`new Vue({data: {state}})`的方式，让数据变成响应式的。当访问`state`对象时候，就直接返回响应式的数据，这样子在`App.vue`中就可以通过`this.$store.state.count`拿到`state`的数据啦，并且是响应式的呢。
 
 ### 编写mutations、actions、getters
 
-上面我们已经设置好state为响应式的数据，这里我们在store.js里面写上mutations、actions、getters，如下
+上面我们已经设置好`state`为响应式的数据，这里我们在`store.js`里面写上`mutations、actions、getters`，如下
 
 ````js
 import Vue from 'vue'
@@ -187,7 +189,7 @@ export default new Vuex.Store({
   }
 })
 ````
-配置选项都写好之后，就看到getters对象里面有个newCount函数，mutations和actions对象里面都有个change函数，配置好store之后我们在App.vue就可以写上，dispatch和commit，分别可以触发actions和mutations，代码如下
+配置选项都写好之后，就看到`getters`对象里面有个`newCount`函数，`mutations`和`actions`对象里面都有个`change函数`，配置好`store`之后我们在`App.vue`就可以写上，`dispatch`和`commit`，分别可以触发`actions`和`mutations`，代码如下
 
 ````html
 <template>
@@ -216,7 +218,10 @@ export default {
 }
 </script>
 ````
-数据都配置好之后，我们开始编写store类，在此之前我们先编写一个循环对象工具函数。如下
+
+数据都配置好之后，我们开始编写store类，在此之前我们先编写一个循环对象工具函数。
+
+
 ````js
 const myforEach = (obj, callback) => Object.keys(obj).forEach(key => callback(key, obj[key]))
 // 作用：
@@ -224,7 +229,7 @@ const myforEach = (obj, callback) => Object.keys(obj).forEach(key => callback(ke
 // 然后就是函数运行callback(a, '123')
 ````
 
-工具函数都准备好了，之后，下面直接县编写getters、mutations和actions的实现
+工具函数都准备好了，之后，下面直接县编写`getters`、`mutations`和`actions`的实现
 
 ````js
 class Store {
@@ -298,7 +303,7 @@ getters是通过对`Object.defineProperty(this.getters, getterName, {})`
 
 ![](./src/images/res1.gif)
 
-到这里大家应该懂了vuex的内部代码的工作流程了，vuex的一半核心应该在这里了。为什么说一半，因为还有一个核心概念module，也就是vuex的数据的模块化。
+到这里大家应该懂了`vuex`的内部代码的工作流程了，`vuex`的一半核心应该在这里了。为什么说一半，因为还有一个核心概念`module`，也就是`vuex`的数据的模块化。
 
 ### vuex数据模块化
 
@@ -357,9 +362,9 @@ export default new Vuex.Store({
 })
 ````
 
-然后就可以在界面上就可以写上`this.$store.state.a.count(显示a模块count)`，`this.$store.state.a.b.count(显示a模块下，b模块的count)`，这里还有一个要注意的，其实在组件中调用`this.$store.dispatch('change')`会同时触发，根的actions和a模块的actions里面的`change`函数。
+然后就可以在界面上就可以写上`this.$store.state.a.count(显示a模块count)`，`this.$store.state.a.b.count(显示a模块下，b模块的count)`，这里还有一个要注意的，其实在组件中调用`this.$store.dispatch('change')`会同时触发，根的`actions`和`a模块`的`actions`里面的`change`函数。
 
-下面我们就直接去实现models的代码，也就是整个vuex的实现代码，
+下面我们就直接去实现`models`的代码，也就是整个`vuex`的实现代码，
 
 ````js
 'use strict'
@@ -513,9 +518,9 @@ const install = _Vue => {
 export default { install, Store }
 ````
 
-主要流程就是根据递归的方式，处理数据，然后根据传进来的配置，进行操作数据。
+看到代码以及注释，主要流程就是根据递归的方式，处理数据，然后根据传进来的配置，进行操作数据。
 
-至此，我们把vuex的代码实现了一遍，在我们App.vue的代码里添加
+至此，我们把`vuex`的代码实现了一遍，在我们`App.vue`的代码里添加
 
 ````html
 <template>
@@ -530,6 +535,7 @@ export default { install, Store }
 ````
 
 最后查看结果。
+
 ![](./src/images/res2.gif)
 
 完结撒花~~~
