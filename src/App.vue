@@ -1,28 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    这里是this.$store.state.count------->{{this.$store.state.count}} <br/><br/>
+    这里是this.$store.getters.newCount------->{{this.$store.getters.newCount}} <br/><br/>
+    这里是this.$store.state.a.count------->{{this.$store.state.a.count}} <br/><br/>
+    <button @click="change">点击触发dispach--> actions</button>
+    <button @click="change1">点击触发commit---> mutations</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'app',
-  components: {
-    HelloWorld
+  methods: {
+    change () {
+      this.$store.dispatch('change')
+    },
+    change1 () {
+      this.$store.commit('change')
+    }
+  },
+  mounted () {
+    console.log(this.$store)
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
